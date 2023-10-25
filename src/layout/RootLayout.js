@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import {
   PieChartOutlined,
   UserOutlined,
@@ -7,6 +7,8 @@ import {
 } from "@ant-design/icons";
 import { Layout, theme, Breadcrumb, Dropdown, Space } from "antd";
 import { Sidebar } from "../components/Sidebar";
+import { useDispatch, useSelector } from "react-redux";
+import { logOff } from "../features/userSlice";
 
 const { Header, Content, Footer } = Layout;
 
@@ -19,16 +21,26 @@ function getItem(label, key, icon, children) {
   };
 }
 
-const routes = [getItem(<Link to="/">Home</Link>, "1", <PieChartOutlined />)];
+const routes = [
+  getItem(<Link to="/">Home</Link>, "", <PieChartOutlined />),
+  getItem("User Management", "sub1", <UserOutlined />, [
+    getItem(<Link to="users">User Lists</Link>, "users"),
+  ]),
+];
 
 export function RootLayout({ children, breadCrumb }) {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+
+  const currentPath = location.pathname.substring(1);
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   function logout(e) {
-    console.log("logout");
-    // dispatch(logOff());
+    dispatch(logOff());
   }
 
   const items = [
@@ -56,7 +68,7 @@ export function RootLayout({ children, breadCrumb }) {
         minHeight: "100vh",
       }}
     >
-      <Sidebar items={routes} />
+      <Sidebar items={routes} path={currentPath} />
 
       <Layout className="site-layout">
         <Header
@@ -75,7 +87,7 @@ export function RootLayout({ children, breadCrumb }) {
           >
             <a onClick={(e) => e.preventDefault()}>
               <Space>
-                My name is nyisaymin
+                {user.name}
                 <DownOutlined />
               </Space>
             </a>

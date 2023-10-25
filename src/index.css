@@ -9,3 +9,22 @@ body {
 code {
   font-family: 'Montserrat', sans-serif !important;
 }
+
+.container {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.editBtn,
+.delBtn {
+  background: #6c757d !important;
+  color: white;
+}
+
+.delBtn {
+  background-color: #dc3545 !important;
+}
+
+.mr-1 {
+  margin-right: 5px !important;
+}

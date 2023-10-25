@@ -10,12 +10,16 @@ import {
   message,
 } from "antd";
 import { login } from "../services/api/loginApi";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/userSlice";
 
 export function Login() {
+  const dispatch = useDispatch();
   function loginHandler(value) {
-    console.log(value);
     login("login", value)
-      .then((res) => console.log(res))
+      .then((res) => {
+        dispatch(setUser(res.data));
+      })
       .catch((err) => console.log(err));
   }
 

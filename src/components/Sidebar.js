@@ -3,9 +3,9 @@ import { Layout, Menu } from "antd";
 import { useState } from "react";
 const { Sider } = Layout;
 
-export function Sidebar({ items }) {
+export function Sidebar({ items, path }) {
   const [collapsed, setCollapsed] = useState(false);
-
+  console.log(path);
   return (
     <Sider
       collapsible
@@ -22,7 +22,7 @@ export function Sidebar({ items }) {
       />
       <Menu
         theme="dark"
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={[path]}
         mode="inline"
         items={items}
       />
