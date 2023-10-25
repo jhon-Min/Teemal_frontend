@@ -1,6 +1,6 @@
 import axios from "axios";
-import { endpoint } from "../config";
+import { loginEndpoint } from "../config";
 
 export function login(url, body) {
-  return axios.post(`${endpoint}${url}`, body);
+  return axios.post(`${loginEndpoint}${url}`, body);
 }
