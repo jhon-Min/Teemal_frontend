@@ -1,5 +1,6 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import {
+  AudioOutlined,
   PieChartOutlined,
   UserOutlined,
   DownOutlined,
@@ -26,6 +27,7 @@ const routes = [
   getItem("User Management", "sub1", <UserOutlined />, [
     getItem(<Link to="users">User Lists</Link>, "users"),
   ]),
+  getItem(<Link to="artists">Artists</Link>, "artists", <AudioOutlined />),
 ];
 
 export function RootLayout({ children, breadCrumb }) {

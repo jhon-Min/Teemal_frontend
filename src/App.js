@@ -11,12 +11,14 @@ import { RootLayout } from "./layout/RootLayout";
 import { Home } from "./pages/Home";
 import { useSelector } from "react-redux";
 import { User } from "./pages/user/User";
+import { Artist } from "./pages/artist/Artist";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<Home />} />
       <Route path="users" element={<User />} />
+      <Route path="artists" element={<Artist />} />
     </Route>
   )
 );
