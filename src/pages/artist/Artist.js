@@ -30,8 +30,6 @@ export function Artist() {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
 
   function showDrawer() {

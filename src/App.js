@@ -12,6 +12,7 @@ import { Home } from "./pages/Home";
 import { useSelector } from "react-redux";
 import { User } from "./pages/user/User";
 import { Artist } from "./pages/artist/Artist";
+import { Release } from "./pages/release/Release";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="users" element={<User />} />
       <Route path="artists" element={<Artist />} />
+      <Route path="release" element={<Release />} />
     </Route>
   )
 );

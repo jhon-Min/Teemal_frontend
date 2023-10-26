@@ -28,6 +28,7 @@ const routes = [
     getItem(<Link to="users">User Lists</Link>, "users"),
   ]),
   getItem(<Link to="artists">Artists</Link>, "artists", <AudioOutlined />),
+  getItem(<Link to="release">Release</Link>, "release", <AudioOutlined />),
 ];
 
 export function RootLayout({ children, breadCrumb }) {
