@@ -98,6 +98,7 @@ export function Artist() {
     createArtist(accessToken, "artists", value)
       .then((res) => {
         onClose();
+        dataLists();
         message.success("Created Success");
       })
       .catch((err) => message.error(err.response.data.message));
@@ -117,8 +118,8 @@ export function Artist() {
   function updateHandler(value) {
     updateArtist(accessToken, "artists/" + value.id, { name: value.name })
       .then((res) => {
+        dataLists(pageNumber);
         onClose();
-        dataLists();
         message.success("Updated Success");
       })
       .catch((err) => message.error(err.response.data.message));
