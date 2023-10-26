@@ -104,7 +104,6 @@ export function Composer() {
   }
 
   function dataLists(page = 1) {
-    console.log(page);
     setLoading(true);
     artistLists(accessToken, "composer", `page=${page}`)
       .then((res) => {
