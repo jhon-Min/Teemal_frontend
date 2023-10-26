@@ -14,6 +14,7 @@ import { User } from "./pages/user/User";
 import { Artist } from "./pages/artist/Artist";
 import { Release } from "./pages/release/Release";
 import { Composer } from "./pages/writer/Composer";
+import { Track } from "./pages/track/Track";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
       <Route path="artists" element={<Artist />} />
       <Route path="release" element={<Release />} />
       <Route path="composer" element={<Composer />} />
+      <Route path="track" element={<Track />} />
     </Route>
   )
 );

@@ -7,6 +7,7 @@ import {
   LogoutOutlined,
   AppstoreOutlined,
   FormOutlined,
+  SoundOutlined,
 } from "@ant-design/icons";
 import { Layout, theme, Breadcrumb, Dropdown, Space } from "antd";
 import { Sidebar } from "../components/Sidebar";
@@ -32,6 +33,7 @@ const routes = [
   getItem(<Link to="artists">Artists</Link>, "artists", <AudioOutlined />),
   getItem(<Link to="composer">Compoer</Link>, "composer", <FormOutlined />),
   getItem(<Link to="release">Release</Link>, "release", <AppstoreOutlined />),
+  getItem(<Link to="track">track</Link>, "track", <SoundOutlined />),
 ];
 
 export function RootLayout({ children, breadCrumb }) {
