@@ -9,6 +9,8 @@ import {
   Form,
   Input,
   Popconfirm,
+  Typography,
+  Select,
 } from "antd";
 import { SaveOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
@@ -19,6 +21,10 @@ import {
   deleteArtist,
   updateArtist,
 } from "../../services/api/musicApi";
+import debounce from "lodash/debounce";
+
+const { Text, Paragraph } = Typography;
+const { TextArea } = Input;
 
 const data = [
   {
@@ -33,13 +39,13 @@ const data = [
   },
   {
     title: "Artist",
-    dataIndex: "name",
-    key: "name",
+    dataIndex: ["artist", "name"],
+    key: ["artist", "name"],
   },
   {
     title: "Release",
-    dataIndex: "name",
-    key: "name",
+    dataIndex: ["release", "name"],
+    key: ["release", "name"],
   },
 ];
 
@@ -52,6 +58,9 @@ export function Track() {
   const [lists, setLists] = useState([]);
   const [total, setTotal] = useState(0);
   const [edit, setEdit] = useState();
+
+  const [artistResult, setArtistResult] = useState([]);
+  const [releaseResult, setReleaseResult] = useState([]);
 
   function showDrawer() {
     setOpen(true);
@@ -73,8 +82,29 @@ export function Track() {
     dataLists(pageNumber);
   }, []);
 
+  function searchArtistHandler(value) {
+    artistLists(accessToken, "artists", `search=${value}`)
+      .then((res) => {
+        console.log(res.data.artists);
+        setArtistResult(res.data.artists);
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function searchReleaseHandler(value) {
+    artistLists(accessToken, "release", `search=${value}`)
+      .then((res) => {
+        console.log(res.data.data);
+        setReleaseResult(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  }
+
   function submitHandler(value) {
-    createArtist(accessToken, "track", value)
+    createArtist(accessToken, "track", {
+      ...value,
+      writerId: "124c1a1e-e293-4ff3-8ba2-8c0ed35119f5",
+    })
       .then((res) => {
         onClose();
         dataLists(pageNumber);
@@ -137,6 +167,76 @@ export function Track() {
 
               <Form.Item name="feat" label="Feat'">
                 <Input placeholder="Featuring" />
+              </Form.Item>
+
+              <Form.Item
+                name="artistId"
+                label="Artist"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input Artist!",
+                  },
+                ]}
+              >
+                <Select
+                  showSearch
+                  style={{
+                    width: "100%",
+                  }}
+                  onSearch={debounce(searchArtistHandler, 1000)}
+                  placeholder="Search to Select"
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    (option?.label ?? "").includes(input)
+                  }
+                  options={artistResult.map((list) => {
+                    return {
+                      value: list.id,
+                      label: list.name,
+                    };
+                  })}
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="releaseId"
+                label="Release"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input Release!",
+                  },
+                ]}
+              >
+                <Select
+                  showSearch
+                  style={{
+                    width: "100%",
+                  }}
+                  onSearch={debounce(searchReleaseHandler, 1000)}
+                  placeholder="Search to Select"
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    (option?.label ?? "").includes(input)
+                  }
+                  options={releaseResult.map((list) => {
+                    return {
+                      value: list.id,
+                      label: list.name,
+                    };
+                  })}
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="chord"
+                label="Chord"
+                rules={[
+                  { required: true, message: "Please input music chord" },
+                ]}
+              >
+                <TextArea showCount placeholder="Enter music chord" />
               </Form.Item>
 
               <Button type="primary" htmlType="submit">
