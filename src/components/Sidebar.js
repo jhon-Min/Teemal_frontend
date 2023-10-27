@@ -1,4 +1,5 @@
-import { Layout, Menu } from "antd";
+import { Image, Layout, Menu } from "antd";
+import logoImage from "../tee-mal-logo.png";
 
 import { useState } from "react";
 const { Sider } = Layout;
@@ -13,13 +14,10 @@ export function Sidebar({ items, path }) {
       width={250}
       onCollapse={(value) => setCollapsed(value)}
     >
-      <div
-        style={{
-          height: 32,
-          margin: 16,
-          background: "rgba(255, 255, 255, 0.2)",
-        }}
-      />
+      <div style={{ textAlign: "center" }}>
+        <Image width={60} src={logoImage} />
+      </div>
+
       <Menu
         theme="dark"
         defaultSelectedKeys={[path]}

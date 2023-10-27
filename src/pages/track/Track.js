@@ -115,7 +115,6 @@ export function Track() {
   function searchArtistHandler(value) {
     artistLists(accessToken, "artists", `search=${value}`)
       .then((res) => {
-        console.log(res.data.artists);
         setArtistResult(res.data.artists);
       })
       .catch((err) => console.log(err));
@@ -124,7 +123,6 @@ export function Track() {
   function searchReleaseHandler(value) {
     artistLists(accessToken, "release", `search=${value}`)
       .then((res) => {
-        console.log(res.data.data);
         setReleaseResult(res.data.data);
       })
       .catch((err) => console.log(err));
@@ -150,10 +148,9 @@ export function Track() {
   }
 
   function updateHandler(value) {
-    updateArtist(accessToken, `track/${value.id}`, {
-      ...value,
-      writerId: "124c1a1e-e293-4ff3-8ba2-8c0ed35119f5",
-    })
+    const data = { ...value, writerId: "124c1a1e-e293-4ff3-8ba2-8c0ed35119f5" };
+    // console.log(data);
+    updateArtist(accessToken, `track/${value.id}`, data)
       .then((res) => {
         onClose();
         dataLists(pageNumber);
@@ -169,11 +166,10 @@ export function Track() {
       });
   }
 
-  function dataLists(page = 1) {
+  function dataLists(page) {
     setLoading(true);
     artistLists(accessToken, "track", `page=${page}`)
       .then((res) => {
-        console.log(res.data);
         setLists(res.data.data);
         setTotal(res.data.count);
       })
@@ -342,7 +338,7 @@ export function Track() {
               </Form.Item>
 
               <Form.Item
-                name="artistId"
+                name={["artist", "name"]}
                 label="Artist"
                 rules={[
                   {
@@ -372,7 +368,7 @@ export function Track() {
               </Form.Item>
 
               <Form.Item
-                name="releaseId"
+                name={["release", "name"]}
                 label="Release"
                 rules={[
                   {
@@ -409,6 +405,10 @@ export function Track() {
                 ]}
               >
                 <TextArea showCount placeholder="Enter music chord" />
+              </Form.Item>
+
+              <Form.Item name="id" style={{ display: "none" }}>
+                <Input placeholder="Track Id" />
               </Form.Item>
 
               <Button type="primary" htmlType="submit">
