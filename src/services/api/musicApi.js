@@ -20,5 +20,6 @@ export function updateArtist(token, url, body) {
 }
 
 export function deleteArtist(token, url) {
-  return axios.delete(`${endpoint}${url}`);
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  return axios.delete(`${endpoint}${url}`, config);
 }

@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { SaveOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   artistLists,
   createArtist,
@@ -22,30 +22,27 @@ import {
   updateArtist,
 } from "../../services/api/musicApi";
 import debounce from "lodash/debounce";
+import { useNavigate } from "react-router-dom";
+import { logOff } from "../../features/userSlice";
 
 const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
 
 const data = [
   {
-    title: "ID",
-    dataIndex: "id",
-    key: "id",
-  },
-  {
     title: "Music Name",
     dataIndex: "name",
-    key: "name",
+    key: "id",
   },
   {
     title: "Artist",
     dataIndex: ["artist", "name"],
-    key: ["artist", "name"],
+    key: "id",
   },
   {
     title: "Release",
     dataIndex: ["release", "name"],
-    key: ["release", "name"],
+    key: "id",
   },
 ];
 
@@ -62,6 +59,9 @@ export function Track() {
   const [artistResult, setArtistResult] = useState([]);
   const [releaseResult, setReleaseResult] = useState([]);
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   function showDrawer() {
     setOpen(true);
   }
@@ -76,7 +76,37 @@ export function Track() {
     setEditOpen(false);
   }
 
-  const columns = [...data];
+  const columns = [
+    ...data,
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (value, data) => {
+        return (
+          <div>
+            <Button
+              size="small"
+              className="editBtn mr-1"
+              onClick={() => editDrawer(data)}
+            >
+              <EditOutlined />
+            </Button>
+            <Popconfirm
+              title="Delete a user?"
+              description="Are you sure to delete this user?"
+              onConfirm={() => deleteHandler(data)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button className="delBtn" size="small">
+                <DeleteOutlined />
+              </Button>
+            </Popconfirm>
+          </div>
+        );
+      },
+    },
+  ];
 
   useEffect(() => {
     dataLists(pageNumber);
@@ -110,7 +140,33 @@ export function Track() {
         dataLists(pageNumber);
         message.success("Created");
       })
-      .catch((err) => message.error("Error"));
+      .catch((err) => {
+        const status = err.response.status;
+        message.error("Error Occur! Please contact the admin");
+        if (status == 401) {
+          dispatch(logOff());
+        }
+      });
+  }
+
+  function updateHandler(value) {
+    updateArtist(accessToken, `track/${value.id}`, {
+      ...value,
+      writerId: "124c1a1e-e293-4ff3-8ba2-8c0ed35119f5",
+    })
+      .then((res) => {
+        onClose();
+        dataLists(pageNumber);
+        message.success("Updated");
+      })
+      .catch((err) => {
+        const status = err.response.status;
+        console.log(err);
+        message.error("Error Occur! Please contact the admin");
+        if (status == 401) {
+          dispatch(logOff());
+        }
+      });
   }
 
   function dataLists(page = 1) {
@@ -123,6 +179,21 @@ export function Track() {
       })
       .catch((err) => message.error("Error Occur! Please contact the admin"))
       .finally(setLoading(false));
+  }
+
+  function deleteHandler(value) {
+    deleteArtist(accessToken, `track/${value.id}`)
+      .then((res) => {
+        dataLists(pageNumber);
+        message.success("Deleted!");
+      })
+      .catch((err) => {
+        const status = err.response.status;
+        message.error("Error Occur! Please contact the admin");
+        if (status == 401) {
+          dispatch(logOff());
+        }
+      });
   }
 
   return (
@@ -157,6 +228,107 @@ export function Track() {
             title="Create Track"
           >
             <Form layout="vertical" onFinish={submitHandler}>
+              <Form.Item
+                name="name"
+                label="Track Name"
+                rules={[{ required: true, message: "Please input track" }]}
+              >
+                <Input placeholder="Track Name" />
+              </Form.Item>
+
+              <Form.Item name="feat" label="Feat'">
+                <Input placeholder="Featuring" />
+              </Form.Item>
+
+              <Form.Item
+                name="artistId"
+                label="Artist"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input Artist!",
+                  },
+                ]}
+              >
+                <Select
+                  showSearch
+                  style={{
+                    width: "100%",
+                  }}
+                  onSearch={debounce(searchArtistHandler, 1000)}
+                  placeholder="Search to Select"
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    (option?.label ?? "").includes(input)
+                  }
+                  options={artistResult.map((list) => {
+                    return {
+                      value: list.id,
+                      label: list.name,
+                    };
+                  })}
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="releaseId"
+                label="Release"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input Release!",
+                  },
+                ]}
+              >
+                <Select
+                  showSearch
+                  style={{
+                    width: "100%",
+                  }}
+                  onSearch={debounce(searchReleaseHandler, 1000)}
+                  placeholder="Search to Select"
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    (option?.label ?? "").includes(input)
+                  }
+                  options={releaseResult.map((list) => {
+                    return {
+                      value: list.id,
+                      label: list.name,
+                    };
+                  })}
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="chord"
+                label="Chord"
+                rules={[
+                  { required: true, message: "Please input music chord" },
+                ]}
+              >
+                <TextArea showCount placeholder="Enter music chord" />
+              </Form.Item>
+
+              <Button type="primary" htmlType="submit">
+                <SaveOutlined />
+                Save
+              </Button>
+            </Form>
+          </Drawer>
+
+          {/* Edit Form */}
+          <Drawer
+            open={editOpen}
+            destroyOnClose={true}
+            onClose={onClose}
+            title="Edit Track"
+          >
+            <Form
+              initialValues={edit}
+              layout="vertical"
+              onFinish={updateHandler}
+            >
               <Form.Item
                 name="name"
                 label="Track Name"
