@@ -8,6 +8,7 @@ import {
   AppstoreOutlined,
   FormOutlined,
   SoundOutlined,
+  BlockOutlined,
 } from "@ant-design/icons";
 import { Layout, theme, Breadcrumb, Dropdown, Space } from "antd";
 import { Sidebar } from "../components/Sidebar";
@@ -30,6 +31,7 @@ const routes = [
   getItem("User Management", "sub1", <UserOutlined />, [
     getItem(<Link to="users">User Lists</Link>, "users"),
   ]),
+  getItem(<Link to="banner">Banner</Link>, "banner", <BlockOutlined />),
   getItem(<Link to="artists">Artists</Link>, "artists", <AudioOutlined />),
   getItem(<Link to="composer">Compoer</Link>, "composer", <FormOutlined />),
   getItem(<Link to="release">Release</Link>, "release", <AppstoreOutlined />),

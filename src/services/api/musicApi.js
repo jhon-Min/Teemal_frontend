@@ -23,3 +23,20 @@ export function deleteArtist(token, url) {
   const config = { headers: { Authorization: `Bearer ${token}` } };
   return axios.delete(`${endpoint}${url}`, config);
 }
+
+export function bannerLists(token, url) {
+  return axios.get(`${endpoint}${url}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+export function createBanner(token, url, body) {
+  return axios.post(`${endpoint}${url}`, body, {
+    headers: {
+      ContentType: "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}

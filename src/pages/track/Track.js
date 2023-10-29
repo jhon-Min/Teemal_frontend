@@ -27,6 +27,7 @@ import { logOff } from "../../features/userSlice";
 
 const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
+const { Option } = Select;
 
 const data = [
   {
@@ -148,8 +149,11 @@ export function Track() {
   }
 
   function updateHandler(value) {
-    const data = { ...value, writerId: "124c1a1e-e293-4ff3-8ba2-8c0ed35119f5" };
-    // console.log(data);
+    const data = {
+      ...value,
+      writerId: "124c1a1e-e293-4ff3-8ba2-8c0ed35119f5",
+    };
+    console.log(data);
     updateArtist(accessToken, `track/${value.id}`, data)
       .then((res) => {
         onClose();
@@ -338,7 +342,7 @@ export function Track() {
               </Form.Item>
 
               <Form.Item
-                name={["artist", "name"]}
+                name="artistId"
                 label="Artist"
                 rules={[
                   {
@@ -368,7 +372,7 @@ export function Track() {
               </Form.Item>
 
               <Form.Item
-                name={["release", "name"]}
+                name="releaseId"
                 label="Release"
                 rules={[
                   {
@@ -394,7 +398,7 @@ export function Track() {
                       label: list.name,
                     };
                   })}
-                />
+                ></Select>
               </Form.Item>
 
               <Form.Item
